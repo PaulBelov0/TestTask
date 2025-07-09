@@ -10,6 +10,7 @@ qt_add_executable(Test_Task
     main.cpp
     main_window.cpp
     main_window.h
+    ui/models/tree_item_model.h ui/models/tree_item_model.cpp
 )
 
 target_link_libraries(Test_Task
