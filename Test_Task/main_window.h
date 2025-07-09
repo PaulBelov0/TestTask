@@ -2,6 +2,11 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
+#include <QTreeView>
+#include <QPointer>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QTableView>
 
 class MainWindow : public QMainWindow
 {
@@ -10,5 +15,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+signals:
+    void resizeEvent(QResizeEvent *event);
+
+private:
+    QPointer<QTreeView> m_treeView;
 };
 #endif // MAIN_WINDOW_H
