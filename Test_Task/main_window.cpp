@@ -3,24 +3,19 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-    setMinimumSize(400, 300);
+    setMinimumSize(800, 600);
 
-    QWidget* wgt = new QWidget(this);
-    layout()->addWidget(wgt);
+    QSplitter* splitter = new QSplitter(Qt::Horizontal, this);
+    setCentralWidget(splitter);
+    splitter->setStretchFactor(1, 1);
 
-    m_treeView = new QTreeView(this);
+    TreeViewField* treeViewField = new TreeViewField(splitter);
+    TableViewField* tableViewField = new TableViewField(splitter);
 
-    QHBoxLayout* mainLayout = new QHBoxLayout(wgt);
-    mainLayout->addWidget(m_treeView.get());
-
-    QVBoxLayout* tabViewLayout = new QVBoxLayout(this);
-    mainLayout->addItem(tabViewLayout);
-
-    QTableView* tabViewTest = new QTableView(this);
-    tabViewLayout->addWidget(tabViewTest);
-
-    connect(this, &MainWindow::resizeEvent, [this, wgt]{
-        wgt->setFixedSize(this->size());
+    connect(this, &MainWindow::resizeEvent, [this, tableViewField, treeViewField, splitter]{
+        splitter->resize(this->size());
+        treeViewField->resize(static_cast<int>(width() * 0.33), height());
+        tableViewField->resize(static_cast<int>(width() * 0.67), height());
     });
 }
 

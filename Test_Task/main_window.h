@@ -3,10 +3,14 @@
 
 #include <QMainWindow>
 #include <QTreeView>
-#include <QPointer>
+#include <QScopedPointer>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QTableView>
+#include <QSplitter>
+
+#include "ui/widgets/tree_view_field.h"
+#include "ui/widgets/table_view_field.h"
 
 class MainWindow : public QMainWindow
 {
@@ -17,9 +21,6 @@ public:
     ~MainWindow();
 
 signals:
-    void resizeEvent(QResizeEvent *event);
-
-private:
-    QPointer<QTreeView> m_treeView;
+    void resizeEvent(QResizeEvent* ev);
 };
 #endif // MAIN_WINDOW_H
