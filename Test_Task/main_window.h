@@ -2,6 +2,16 @@
 #define MAIN_WINDOW_H
 
 #include <QMainWindow>
+#include <QTreeView>
+#include <QScopedPointer>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QTableView>
+#include <QSplitter>
+
+#include "ui/widgets/tree_view_field.h"
+#include "ui/widgets/table_view_field.h"
+#include "services/data_controller.h"
 
 class MainWindow : public QMainWindow
 {
@@ -10,5 +20,13 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void setFile(QString pathToFile);
+
+signals:
+    void resizeEvent(QResizeEvent* ev);
+
+private:
+    QScopedPointer<DataController> m_dataController;
 };
 #endif // MAIN_WINDOW_H
