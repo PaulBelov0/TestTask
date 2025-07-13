@@ -21,9 +21,7 @@ int main(int argc, char *argv[])
 
 #elif __WIN32
 
-    pathToFile = QFileDialog::getOpenFileName(
-                            nullptr, "Select file", "C:\Users\" + QString(username) + "\Documents", "*.zip"
-                            );
+    pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", "C:\Users\" + QString(username) + "\Documents", "*.zip");
 
 #else
 
