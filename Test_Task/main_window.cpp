@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() {}
 
-void MainWindow::setFile(QString pathToFile)
+void MainWindow::setFilePath(QString pathToFile)
 {
     m_dataController->setFile(pathToFile);
 }

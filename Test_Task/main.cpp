@@ -9,19 +9,21 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QString pathToFile = "";
 
-#ifdef __linux__
-
     char* username = getenv("USER");
     if (!username)
     {
         username = getenv("USERNAME");
     }
 
+#ifdef __linux__
+
     pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", "/home/" + QString(username), "*.zip");
 
 #elif __WIN32
 
-    pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", "C:", "*.zip");
+    pathToFile = QFileDialog::getOpenFileName(
+                            nullptr, "Select file", "C:\Users\" + QString(username) + "\Documents", "*.zip"
+                            );
 
 #else
 
@@ -36,7 +38,7 @@ int main(int argc, char *argv[])
         return 0;
 
     MainWindow w;
-    w.setFile(pathToFile);
+    w.setFilePath(pathToFile);
 
     w.show();
 

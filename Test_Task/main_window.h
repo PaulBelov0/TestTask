@@ -21,7 +21,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void setFile(QString pathToFile);
+    void setFilePath(QString pathToFile);
 
 signals:
     void resizeEvent(QResizeEvent* ev);
