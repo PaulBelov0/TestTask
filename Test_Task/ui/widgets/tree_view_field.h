@@ -7,12 +7,17 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
+#include <list>
+#include <string>
+
 class TreeViewField : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TreeViewField(QWidget *parent = nullptr);
+    explicit TreeViewField(QString path, QWidget *parent = nullptr);
 
+private:
+    QString getArchiveName(QString path);
 private:
     QPointer<QTreeWidget> m_treeWidget;
 };

@@ -1,6 +1,6 @@
 #include "main_window.h"
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(QString path, QWidget *parent)
     : QMainWindow(parent)
     , m_dataController(new DataController(this))
 {
@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(splitter);
     splitter->setStretchFactor(1, 1);
 
-    TreeViewField* treeViewField = new TreeViewField(splitter);
+    TreeViewField* treeViewField = new TreeViewField(path, splitter);
     TableViewField* tableViewField = new TableViewField(splitter);
 
     connect(this, &MainWindow::resizeEvent, [this, tableViewField, treeViewField, splitter]{
@@ -20,9 +20,3 @@ MainWindow::MainWindow(QWidget *parent)
     });
 }
 
-MainWindow::~MainWindow() {}
-
-void MainWindow::setFilePath(QString pathToFile)
-{
-    m_dataController->setFile(pathToFile);
-}

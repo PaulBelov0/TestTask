@@ -37,8 +37,7 @@ int main(int argc, char *argv[])
     if (pathToFile == "")
         return 0;
 
-    MainWindow w;
-    w.setFilePath(pathToFile);
+    MainWindow w(pathToFile);
 
     w.show();
 

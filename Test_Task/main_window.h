@@ -18,10 +18,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
-
-    void setFilePath(QString pathToFile);
+    MainWindow(QString path, QWidget *parent = nullptr);
 
 signals:
     void resizeEvent(QResizeEvent* ev);
