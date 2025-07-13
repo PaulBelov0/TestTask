@@ -4,18 +4,12 @@ TreeViewField::TreeViewField(QString path, QWidget *parent)
     : QWidget{parent}
 {
     m_treeWidget = new QTreeWidget(this);
+    m_treeWidget->setHeaderHidden(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->addWidget(m_treeWidget);
 
-    QTreeWidgetItem* archiveItem = new QTreeWidgetItem(m_treeWidget, 0);
-    archiveItem->setText(0, "Архив: " + getArchiveName(path));
-    archiveItem->setText(1, "Поиск начат.");
-
-    QTreeWidgetItem* resultItem = new QTreeWidgetItem(m_treeWidget, 0);
-    resultItem->setText(0, "Результаты поиска");
-
-    m_treeWidget->addTopLevelItem(archiveItem);
+    initTreeWidgetItems(path);
 }
 
 QString TreeViewField::getArchiveName(QString path)
@@ -35,4 +29,29 @@ QString TreeViewField::getArchiveName(QString path)
         result += it->mirroredChar();
 
     return result;
+}
+
+void TreeViewField::initTreeWidgetItems(QString path)
+{
+    QTreeWidgetItem* archiveItem = new QTreeWidgetItem(m_treeWidget);
+    archiveItem->setText(0, "Архив: " + getArchiveName(path));
+    archiveItem->setText(1, "Поиск начат.");
+    archiveItem->setExpanded(true);
+
+    QTreeWidgetItem* sourcesItem = new QTreeWidgetItem(archiveItem);
+    sourcesItem->setText(0, "Источники");
+
+    QTreeWidgetItem* disksItem = new QTreeWidgetItem(archiveItem);
+    disksItem->setText(0, "Диски и разделы");
+
+    QTreeWidgetItem* resultItem = new QTreeWidgetItem(m_treeWidget);
+    resultItem->setText(0, "Результаты поиска");
+    resultItem->setExpanded(true);
+
+    QTreeWidgetItem* fileInfoItem = new QTreeWidgetItem(resultItem);
+    fileInfoItem->setFirstColumnSpanned(true);
+    fileInfoItem->setText(0, "Файлы");
+    fileInfoItem->setText(1, "Описание дочернего элемента 2");
+
+    m_treeWidget->addTopLevelItem(archiveItem);
 }
