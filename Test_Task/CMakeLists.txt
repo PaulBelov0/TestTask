@@ -13,7 +13,7 @@ qt_add_executable(Test_Task
     ui/models/tab_item_model.h ui/models/tab_item_model.cpp
     ui/widgets/tree_view_field.h ui/widgets/tree_view_field.cpp
     ui/widgets/table_view_field.h ui/widgets/table_view_field.cpp
-    services/data_controller.h services/data_controller.cpp
+    services/app_manager.h services/app_manager.cpp
     services/archive_manager.h services/archive_manager.cpp
 )
 

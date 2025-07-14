@@ -11,7 +11,7 @@
 
 #include "ui/widgets/tree_view_field.h"
 #include "ui/widgets/table_view_field.h"
-#include "services/data_controller.h"
+#include "services/app_manager.h"
 
 class MainWindow : public QMainWindow
 {
