@@ -1,12 +1,9 @@
 #include "services/app_manager.h"
-#include "main_window.h"
-
-#include <QApplication>
-#include <QFileDialog>
-#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
+    setlocale(LC_ALL, "Russiаn");
+
     AppManager app(nullptr);
 
     return app.start(argc, argv);

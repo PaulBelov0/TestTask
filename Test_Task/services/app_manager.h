@@ -12,6 +12,7 @@
 #include <windows.h>
 #endif
 
+#include <iostream>
 
 #include <QObject>
 #include <QApplication>
@@ -24,7 +25,7 @@
 #include <QSharedPointer>
 
 #include "archive_manager.h"
-#include "main_window.h"
+#include "ui/main_window.h"
 
 enum class LaunchConfig;
 

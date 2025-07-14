@@ -40,7 +40,8 @@ int AppManager::start(int argc, char* argv[])
     if (launchConfig == LaunchConfig::Cmd)
     {
         forceTerminal();
-        QCoreApplication a(argc, argv);
+
+    QCoreApplication ca(argc, argv);
 
         try
         {
@@ -51,10 +52,10 @@ int AppManager::start(int argc, char* argv[])
             return 0;
         }
 
-
-        qDebug() << "Test cmd";
-        return a.exec();
+        return ca.exec();
     }
+    else
+        return 0;
 }
 
 void AppManager::setPath(LaunchConfig type)
@@ -88,10 +89,11 @@ void AppManager::setPath(LaunchConfig type)
     }
     else
     {
-        qDebug() << "else";
+        pathToFile = "/home/belov-paul/operator.zip";
     }
     if (pathToFile == "")
-        throw;
+        return;
+    m_path = pathToFile;
 
 }
 
@@ -149,7 +151,16 @@ void AppManager::forceTerminal()
                                                            "-e", "bash", "-c",
                                                            QString("\"%1\"; exec bash").arg(QCoreApplication::applicationFilePath())
                                                        });
-        exit(0);
     }
+
+    // const QString terminal = qEnvironmentVariable("TERMINAL", "gnome-terminal");
+    // if (QProcess::execute("which", {terminal}) == 0) {
+    //     QString command = QString("%1 \"%2\"")
+    //     .arg(terminal)
+    //         .arg(QCoreApplication::applicationFilePath());
+
+    //     QProcess::startDetached("bash", {"-c", command});
+    //     exit(0);
+    // }
 #endif
 }
