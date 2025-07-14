@@ -4,7 +4,7 @@ int main(int argc, char *argv[])
 {
     setlocale(LC_ALL, "Russiаn");
 
-    AppManager app(nullptr);
+    AppManager app;
 
     return app.start(argc, argv);
 }

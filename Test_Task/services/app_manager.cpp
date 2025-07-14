@@ -41,7 +41,7 @@ int AppManager::start(int argc, char* argv[])
     {
         forceTerminal();
 
-    QCoreApplication ca(argc, argv);
+        QCoreApplication ca(argc, argv);
 
         try
         {
@@ -92,7 +92,7 @@ void AppManager::setPath(LaunchConfig type)
         pathToFile = "/home/belov-paul/operator.zip";
     }
     if (pathToFile == "")
-        return;
+        throw;
     m_path = pathToFile;
 
 }
@@ -145,22 +145,12 @@ void AppManager::forceTerminal()
         freopen("CONOUT$", "w", stdout);
         freopen("CONOUT$", "w", stderr);
     }
-#else
-    if (!isatty(fileno(stdout))) {
-        QProcess::startDetached("x-terminal-emulator", {
-                                                           "-e", "bash", "-c",
-                                                           QString("\"%1\"; exec bash").arg(QCoreApplication::applicationFilePath())
+#elif __linux__
+    if (!isatty(fileno(stdout)))
+    {
+        QProcess::startDetached("x-terminal-emulator", {"-e", "bash", "-c",
+                                                          QString("\"%1\"; exec bash").arg(QCoreApplication::applicationFilePath())
                                                        });
     }
-
-    // const QString terminal = qEnvironmentVariable("TERMINAL", "gnome-terminal");
-    // if (QProcess::execute("which", {terminal}) == 0) {
-    //     QString command = QString("%1 \"%2\"")
-    //     .arg(terminal)
-    //         .arg(QCoreApplication::applicationFilePath());
-
-    //     QProcess::startDetached("bash", {"-c", command});
-    //     exit(0);
-    // }
 #endif
 }
