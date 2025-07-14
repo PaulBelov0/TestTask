@@ -1,6 +1,6 @@
 #include "main_window.h"
 
-MainWindow::MainWindow(QString path, QWidget *parent)
+MainWindow::MainWindow(QString& path, QWidget *parent)
     : QMainWindow(parent)
     , m_dataController(new DataController(this))
 {

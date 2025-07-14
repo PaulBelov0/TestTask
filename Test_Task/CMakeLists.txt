@@ -14,6 +14,7 @@ qt_add_executable(Test_Task
     ui/widgets/tree_view_field.h ui/widgets/tree_view_field.cpp
     ui/widgets/table_view_field.h ui/widgets/table_view_field.cpp
     services/data_controller.h services/data_controller.cpp
+    services/archive_manager.h services/archive_manager.cpp
 )
 
 target_link_libraries(Test_Task
