@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QString path, QWidget *parent = nullptr);
+    MainWindow(QString& path, QWidget *parent = nullptr);
 
 signals:
     void resizeEvent(QResizeEvent* ev);

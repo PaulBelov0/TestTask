@@ -1,6 +1,6 @@
 #include "tree_view_field.h"
 
-TreeViewField::TreeViewField(QString path, QWidget *parent)
+TreeViewField::TreeViewField(QString& path, QWidget *parent)
     : QWidget{parent}
 {
     m_treeWidget = new QTreeWidget(this);
@@ -12,7 +12,7 @@ TreeViewField::TreeViewField(QString path, QWidget *parent)
     initTreeWidgetItems(path);
 }
 
-QString TreeViewField::getArchiveName(QString path)
+QString TreeViewField::getArchiveName(QString& path)
 {
     std::list<QChar> charName;
     QString result = "";
@@ -31,7 +31,7 @@ QString TreeViewField::getArchiveName(QString path)
     return result;
 }
 
-void TreeViewField::initTreeWidgetItems(QString path)
+void TreeViewField::initTreeWidgetItems(QString& path)
 {
     QTreeWidgetItem* archiveItem = new QTreeWidgetItem(m_treeWidget);
     archiveItem->setText(0, "Архив: " + getArchiveName(path));
