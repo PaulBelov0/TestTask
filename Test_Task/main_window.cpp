@@ -2,7 +2,6 @@
 
 MainWindow::MainWindow(QString& path, QWidget *parent)
     : QMainWindow(parent)
-    , m_dataController(new DataController(this))
 {
     setMinimumSize(800, 600);
 

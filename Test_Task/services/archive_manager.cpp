@@ -10,7 +10,7 @@ ArchiveManager::ArchiveManager(QString& path, QObject* parent)
 void ArchiveManager::processZip() {
     QFile file(m_path);
     if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "File open Error!";
+        qWarning() << "File open Error!";
         return;
     }
 

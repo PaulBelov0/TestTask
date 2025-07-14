@@ -15,12 +15,25 @@ qt_add_executable(Test_Task
     ui/widgets/table_view_field.h ui/widgets/table_view_field.cpp
     services/app_manager.h services/app_manager.cpp
     services/archive_manager.h services/archive_manager.cpp
+    config.json
+)
+
+target_include_directories(Test_Task PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}  # Корень проекта
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/widgets  # Путь к main_window.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/services    # Путь к archive_manager.h
 )
 
 target_link_libraries(Test_Task
     PRIVATE
         Qt::Core
         Qt::Widgets
+)
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/config.json
+    ${CMAKE_CURRENT_BINARY_DIR}/config.json
+    COPYONLY
 )
 
 include(GNUInstallDirs)

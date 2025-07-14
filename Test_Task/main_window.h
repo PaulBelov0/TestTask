@@ -11,7 +11,6 @@
 
 #include "ui/widgets/tree_view_field.h"
 #include "ui/widgets/table_view_field.h"
-#include "services/app_manager.h"
 
 class MainWindow : public QMainWindow
 {
@@ -22,8 +21,5 @@ public:
 
 signals:
     void resizeEvent(QResizeEvent* ev);
-
-private:
-    QScopedPointer<DataController> m_dataController;
 };
 #endif // MAIN_WINDOW_H
