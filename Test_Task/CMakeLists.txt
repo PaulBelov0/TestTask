@@ -8,8 +8,8 @@ qt_standard_project_setup()
 qt_add_executable(Test_Task
     WIN32 MACOSX_BUNDLE
     main.cpp
-    main_window.cpp
-    main_window.h
+    ui/main_window.cpp
+    ui/main_window.h
     ui/models/tab_item_model.h ui/models/tab_item_model.cpp
     ui/widgets/tree_view_field.h ui/widgets/tree_view_field.cpp
     ui/widgets/table_view_field.h ui/widgets/table_view_field.cpp
@@ -19,9 +19,9 @@ qt_add_executable(Test_Task
 )
 
 target_include_directories(Test_Task PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}  # Корень проекта
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui/widgets  # Путь к main_window.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/services    # Путь к archive_manager.h
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/widgets
+    ${CMAKE_CURRENT_SOURCE_DIR}/services
 )
 
 target_link_libraries(Test_Task
