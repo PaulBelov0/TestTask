@@ -136,11 +136,6 @@ LaunchConfig AppManager::getConfiguration()
     if (testEnabled)
         return LaunchConfig::Tests;
 
-    qDebug() << "Конфиг загружен:"
-             << "\n  GUI:" << guiEnabled
-             << "\n  CMD:" << cmdEnabled
-             << "\n  TEST:" << testEnabled;
-
     return LaunchConfig::ERR;
 }
 
