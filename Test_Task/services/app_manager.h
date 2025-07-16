@@ -40,7 +40,7 @@ public:
     int start(int argc, char* argv[]);
 
 private:
-    void setPath(LaunchConfig type);
+    void setPath();
     void forceTerminal();
     LaunchConfig getConfiguration();
 

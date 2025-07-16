@@ -11,7 +11,9 @@ AppManager::AppManager(QObject* parent)
     m_cfg = QSharedPointer<QJsonDocument>(new QJsonDocument(QJsonDocument::fromJson(file.readAll())));
     m_launchConfig = getConfiguration();
 
-    connect(this, &AppManager::onUserNullPath, [this]{setPath(m_launchConfig);});
+    setPath();
+
+    connect(this, &AppManager::onUserNullPath, [this]{setPath();});
 }
 
 int AppManager::start(int argc, char* argv[])
@@ -48,19 +50,19 @@ int AppManager::start(int argc, char* argv[])
         return 0;
 }
 
-void AppManager::setPath(LaunchConfig type)
+void AppManager::setPath()
 {
     QString pathToFile = "";
+
+    if (m_launchConfig == LaunchConfig::Gui)
+    {
+#ifdef __linux__
 
     char* username = getenv("USER");
     if (!username)
     {
         username = getenv("USERNAME");
     }
-
-    if (type == LaunchConfig::Gui)
-    {
-#ifdef __linux__
 
     pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", "/home/" + QString(username), "*.zip");
 
@@ -95,9 +97,9 @@ void AppManager::setPath(LaunchConfig type)
     {
         std::string userInput;
 
-        qDebug() << "Введите путь к файлу '*.zip':  ";
+        std::cout << "Введите путь к файлу '*.zip':  ";
         std::getline(std::cin, userInput);
-        qDebug() << "Input: " << userInput;
+        // qDebug() << "Input: " << userInput;
 
         pathToFile = QString::fromStdString(userInput);
     }
