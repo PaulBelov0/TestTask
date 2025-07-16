@@ -11,8 +11,6 @@ AppManager::AppManager(QObject* parent)
     m_cfg = QSharedPointer<QJsonDocument>(new QJsonDocument(QJsonDocument::fromJson(file.readAll())));
     m_launchConfig = getConfiguration();
 
-    setPath();
-
     connect(this, &AppManager::onUserNullPath, [this]{setPath();});
 }
 
@@ -26,12 +24,9 @@ int AppManager::start(int argc, char* argv[])
     if (m_launchConfig == LaunchConfig::Gui)
     {
         QApplication a(argc, argv);
-\
-        setPath(launchConfig);
-
+        setPath();
 
         MainWindow w(m_path);
-
         w.show();
 
         return a.exec();
@@ -40,11 +35,9 @@ int AppManager::start(int argc, char* argv[])
     {
         QCoreApplication ca(argc, argv);
 
-        setPath(launchConfig);
+        TerminalCore terminalCore(this);
 
-        TerminalCore terminalCore(m_path, this);
-
-        return ca.exec();
+        return terminalCore.start();
     }
     else
         return 0;
@@ -54,8 +47,6 @@ void AppManager::setPath()
 {
     QString pathToFile = "";
 
-    if (m_launchConfig == LaunchConfig::Gui)
-    {
 #ifdef __linux__
 
     char* username = getenv("USER");
@@ -92,17 +83,8 @@ void AppManager::setPath()
     return 0;
 
 #endif
-    }
-    else
-    {
-        std::string userInput;
 
-        std::cout << "Введите путь к файлу '*.zip':  ";
-        std::getline(std::cin, userInput);
-        // qDebug() << "Input: " << userInput;
 
-        pathToFile = QString::fromStdString(userInput);
-    }
     if (pathToFile == "")
     {
         emit onUserNullPath();
