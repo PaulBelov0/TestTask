@@ -5,7 +5,7 @@ AppManager::AppManager(QObject* parent)
 {
     QFile file("config.json");
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Ошибка открытия файла:" << file.errorString();
+        qWarning() << "Ошибка открытия файла конфигурации:" << file.errorString();
     }
 
     m_cfg = QSharedPointer<QJsonDocument>(new QJsonDocument(QJsonDocument::fromJson(file.readAll())));
@@ -101,7 +101,12 @@ void AppManager::setPath(LaunchConfig type)
     }
     else
     {
-        pathToFile = "/home/belov-paul/operator.zip";
+        std::string userInput;
+        std::cin >> userInput;
+
+        userInput == ""
+        ? throw
+            : pathToFile = QString::fromStdString(userInput);
     }
     if (pathToFile == "")
         throw;
