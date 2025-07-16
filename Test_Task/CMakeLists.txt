@@ -16,6 +16,7 @@ qt_add_executable(Test_Task
     services/app_manager.h services/app_manager.cpp
     services/archive_manager.h services/archive_manager.cpp
     config.json
+    terminal/terminal_core.h terminal/terminal_core.cpp
 )
 
 target_include_directories(Test_Task PRIVATE

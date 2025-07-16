@@ -13,6 +13,7 @@
 #endif
 
 #include <iostream>
+#include <stdio.h>
 
 #include <QObject>
 #include <QApplication>
@@ -26,25 +27,29 @@
 
 #include "archive_manager.h"
 #include "ui/main_window.h"
+#include "terminal/terminal_core.h"
 
 enum class LaunchConfig;
 
 class AppManager : public QObject
 {
+    Q_OBJECT
 public:
     AppManager(QObject* parent = nullptr);
 
     int start(int argc, char* argv[]);
 
-
 private:
-
     void setPath(LaunchConfig type);
     void forceTerminal();
     LaunchConfig getConfiguration();
 
+signals:
+    void onUserNullPath();
+
 private:
     QString m_path;
+    LaunchConfig m_launchConfig;
     QSharedPointer<QJsonDocument> m_cfg;
 };
 
