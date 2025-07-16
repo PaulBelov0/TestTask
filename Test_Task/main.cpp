@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[])
 {
-    setlocale(LC_ALL, "Russiаn");
+    setlocale(LC_ALL, "Russian");
 
     AppManager app;
 

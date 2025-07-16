@@ -1,15 +1,15 @@
 #ifndef APP_MANAGER_H
 #define APP_MANAGER_H
 
-// Linux/Unix
 #ifdef __linux__
-#include <unistd.h>  // Добавляем для isatty()
+#include <unistd.h>
 #include <fcntl.h>
 #endif
 
-// Windows
 #ifdef __WIN32
 #include <windows.h>
+#include <shlwapi.h>
+#include <shlobj.h>
 #endif
 
 #include <iostream>
@@ -53,7 +53,7 @@ enum class LaunchConfig
     Gui,
     Cmd,
     Tests,
-    ERROR
+    ERR
 };
 
 #endif // APP_MANAGER_H

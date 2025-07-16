@@ -15,7 +15,7 @@ int AppManager::start(int argc, char* argv[])
 {
     LaunchConfig launchConfig = getConfiguration();
 
-    if (launchConfig == LaunchConfig::ERROR)
+    if (launchConfig == LaunchConfig::ERR)
         return -1;
 
     if (launchConfig == LaunchConfig::Gui)
@@ -75,9 +75,21 @@ void AppManager::setPath(LaunchConfig type)
     pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", "/home/" + QString(username), "*.zip");
 
 #elif __WIN32
+    PWSTR pszPath = nullptr;
+    HRESULT hr = SHGetKnownFolderPath(FOLDERID_Documents, 0, NULL, &pszPath);
 
-    pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", "C:\Users\" + QString(username) + "\Documents", "*.zip");
+    if (SUCCEEDED(hr))
+    {
+        QString documentsPath = QString::fromWCharArray(pszPath);
+        CoTaskMemFree(pszPath);
 
+        pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", documentsPath, "*.zip");
+    }
+    else
+    {
+        qDebug() << "Failed to get Documents folder path. HRESULT:" << hr;
+        pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", "C:\\", "*.zip");
+    }
 #else
 
     QMessageBox msg;
@@ -129,13 +141,13 @@ LaunchConfig AppManager::getConfiguration()
              << "\n  CMD:" << cmdEnabled
              << "\n  TEST:" << testEnabled;
 
-    return LaunchConfig::ERROR;
+    return LaunchConfig::ERR;
 }
 
 void AppManager::forceTerminal()
 {
 #ifdef __WIN32
-    if (AttachConsole(ATTACH_PARENT_PROCESS)
+    if (AttachConsole(ATTACH_PARENT_PROCESS))
     {
         freopen("CONOUT$", "w", stdout);
         freopen("CONOUT$", "w", stderr);
