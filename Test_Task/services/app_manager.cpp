@@ -5,72 +5,55 @@ AppManager::AppManager(QObject* parent)
 {
     QFile file("config.json");
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Ошибка открытия файла:" << file.errorString();
+        qFatal() << "Ошибка открытия файла:" << file.errorString();
     }
 
     m_cfg = QSharedPointer<QJsonDocument>(new QJsonDocument(QJsonDocument::fromJson(file.readAll())));
+    m_launchConfig = getConfiguration();
+
+    connect(this, &AppManager::onUserNullPath, [this]{setPath();});
 }
 
 int AppManager::start(int argc, char* argv[])
 {
     LaunchConfig launchConfig = getConfiguration();
 
-    if (launchConfig == LaunchConfig::ERR)
+    if (m_launchConfig == LaunchConfig::ERR)
         return -1;
 
-    if (launchConfig == LaunchConfig::Gui)
+    if (m_launchConfig == LaunchConfig::Gui)
     {
         QApplication a(argc, argv);
-
-        try
-        {
-            setPath(launchConfig);
-        }
-        catch (const std::exception& ex)
-        {
-            return 0;
-        }
+        setPath();
 
         MainWindow w(m_path);
-
         w.show();
 
         return a.exec();
     }
-    if (launchConfig == LaunchConfig::Cmd)
+    else if (m_launchConfig == LaunchConfig::Cmd)
     {
-        forceTerminal();
-
         QCoreApplication ca(argc, argv);
 
-        try
-        {
-            setPath(launchConfig);
-        }
-        catch (const std::exception& ex)
-        {
-            return 0;
-        }
+        TerminalCore terminalCore(this);
 
-        return ca.exec();
+        return terminalCore.start();
     }
     else
         return 0;
 }
 
-void AppManager::setPath(LaunchConfig type)
+void AppManager::setPath()
 {
     QString pathToFile = "";
+
+#ifdef __linux__
 
     char* username = getenv("USER");
     if (!username)
     {
         username = getenv("USERNAME");
     }
-
-    if (type == LaunchConfig::Gui)
-    {
-#ifdef __linux__
 
     pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", "/home/" + QString(username), "*.zip");
 
@@ -84,11 +67,13 @@ void AppManager::setPath(LaunchConfig type)
         CoTaskMemFree(pszPath);
 
         pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", documentsPath, "*.zip");
+        qDebug() << pathToFile;
     }
     else
     {
-        qDebug() << "Failed to get Documents folder path. HRESULT:" << hr;
+        qWarning() << "Failed to get Documents folder path. HRESULT:" << hr;
         pathToFile = QFileDialog::getOpenFileName(nullptr, "Select file", "C:\\", "*.zip");
+        qDebug() << pathToFile;
     }
 #else
 
@@ -98,15 +83,14 @@ void AppManager::setPath(LaunchConfig type)
     return 0;
 
 #endif
-    }
-    else
-    {
-        pathToFile = "/home/belov-paul/operator.zip";
-    }
-    if (pathToFile == "")
-        throw;
-    m_path = pathToFile;
 
+
+    if (pathToFile == "")
+    {
+        emit onUserNullPath();
+        return;
+    }
+    m_path = pathToFile;
 }
 
 LaunchConfig AppManager::getConfiguration()
@@ -115,7 +99,7 @@ LaunchConfig AppManager::getConfiguration()
 
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Ошибка открытия файла:" << file.errorString();
+        qCritical() << "File open Error:" << file.errorString();
     }
 
     QJsonObject root = m_cfg->object();
@@ -136,27 +120,14 @@ LaunchConfig AppManager::getConfiguration()
     if (testEnabled)
         return LaunchConfig::Tests;
 
-    qDebug() << "Конфиг загружен:"
-             << "\n  GUI:" << guiEnabled
-             << "\n  CMD:" << cmdEnabled
-             << "\n  TEST:" << testEnabled;
-
     return LaunchConfig::ERR;
 }
 
 void AppManager::forceTerminal()
 {
 #ifdef __WIN32
-    if (AttachConsole(ATTACH_PARENT_PROCESS))
-    {
-        freopen("CONOUT$", "w", stdout);
-        freopen("CONOUT$", "w", stderr);
-    }
-    else if (AllocConsole())
-    {
-        freopen("CONOUT$", "w", stdout);
-        freopen("CONOUT$", "w", stderr);
-    }
+    qDebug() << "start";
+    system("start PowerShell.exe");
 #elif __linux__
     if (!isatty(fileno(stdout)))
     {

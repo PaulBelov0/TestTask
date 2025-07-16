@@ -1,6 +1,8 @@
 #ifndef ARCHIVE_MANAGER_H
 #define ARCHIVE_MANAGER_H
 
+#include <string>
+
 #include <QObject>
 #include <QFile>
 #include <QString>
@@ -14,11 +16,14 @@ struct ZipEntry;
 class ArchiveManager : public QObject
 {
 public:
-    ArchiveManager(QString& path, QObject* parent);
+    explicit ArchiveManager(QString& path, QObject* parent = nullptr);
+    explicit ArchiveManager(QObject* parent = nullptr);
 
     void processZip();
 
-    qint64 findEOCD(QFile &file);    // Searching EOCD (End of Central Directory)
+    void setPath(std::string& path);
+
+    qint64 findEOCD(QFile &file);
     QList<ZipEntry> readCentralDirectory(QFile &file, qint64 eocdPos);
     QByteArray readUncompressedFile(QFile &zipFile, QList<ZipEntry>::iterator &entry);
 

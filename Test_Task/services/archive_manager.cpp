@@ -7,6 +7,17 @@ ArchiveManager::ArchiveManager(QString& path, QObject* parent)
     m_path = path;
 }
 
+ArchiveManager::ArchiveManager(QObject* parent)
+    : QObject(parent)
+{
+    m_targetWord = "secret";
+}
+
+void ArchiveManager::setPath(std::string &path)
+{
+    m_path = QString::fromStdString(path);
+}
+
 void ArchiveManager::processZip() {
     QFile file(m_path);
     if (!file.open(QIODevice::ReadOnly)) {
