@@ -16,8 +16,6 @@ AppManager::AppManager(QObject* parent)
 
 int AppManager::start(int argc, char* argv[])
 {
-    LaunchConfig launchConfig = getConfiguration();
-
     if (m_launchConfig == LaunchConfig::ERR)
         return -1;
 
@@ -95,9 +93,9 @@ void AppManager::setPath()
 
 LaunchConfig AppManager::getConfiguration()
 {
-    const QString path = "config.json";
+    const QString cdgFile = "config.json";
 
-    QFile file(path);
+    QFile file(cdgFile);
     if (!file.open(QIODevice::ReadOnly)) {
         qCritical() << "File open Error:" << file.errorString();
     }

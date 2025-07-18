@@ -18,25 +18,31 @@ void ArchiveManager::setPath(std::string &path)
     m_path = QString::fromStdString(path);
 }
 
-void ArchiveManager::processZip() {
+void ArchiveManager::processZip()
+{
     QFile file(m_path);
-    if (!file.open(QIODevice::ReadOnly)) {
+    if (!file.open(QIODevice::ReadOnly))
+    {
         qWarning() << "File open Error!";
         return;
     }
 
     qint64 eocdPos = findEOCD(file);
-    if (eocdPos == -1) {
+    if (eocdPos == -1)
+    {
         qDebug() << "It's not ZIP";
         return;
     }
 
     QList<ZipEntry> entries = readCentralDirectory(file, eocdPos);
-    for (QList<ZipEntry>::iterator it = entries.begin(); it != entries.end(); ++it) {
+    for (QList<ZipEntry>::iterator it = entries.begin(); it != entries.end(); ++it)
+    {
         if (!it->filename.endsWith(".txt")) continue;
 
         QByteArray data = readUncompressedFile(file, it);
-        if (data.contains(m_targetWord.toUtf8())) {
+
+        if (data.contains(m_targetWord.toUtf8()))
+        {
             qDebug() << "File:" << it->filename;
             // Написать сохранение в нужную папку           //todo
         }
