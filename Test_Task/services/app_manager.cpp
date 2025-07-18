@@ -34,8 +34,9 @@ int AppManager::start(int argc, char* argv[])
         QCoreApplication ca(argc, argv);
 
         TerminalCore terminalCore(this);
+        terminalCore.start();
 
-        return terminalCore.start();
+        return 0;
     }
     else
         return 0;
@@ -119,19 +120,4 @@ LaunchConfig AppManager::getConfiguration()
         return LaunchConfig::Tests;
 
     return LaunchConfig::ERR;
-}
-
-void AppManager::forceTerminal()
-{
-#ifdef __WIN32
-    qDebug() << "start";
-    system("start PowerShell.exe");
-#elif __linux__
-    if (!isatty(fileno(stdout)))
-    {
-        QProcess::startDetached("x-terminal-emulator", {"-e", "bash", "-c",
-                                                          QString("\"%1\"; exec bash").arg(QCoreApplication::applicationFilePath())
-                                                       });
-    }
-#endif
 }

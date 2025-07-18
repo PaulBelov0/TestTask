@@ -1,17 +1,6 @@
 #ifndef APP_MANAGER_H
 #define APP_MANAGER_H
 
-#ifdef __linux__
-#include <unistd.h>
-#include <fcntl.h>
-#endif
-
-#ifdef __WIN32
-#include <windows.h>
-#include <shlwapi.h>
-#include <shlobj.h>
-#endif
-
 #include <iostream>
 #include <stdio.h>
 
@@ -41,7 +30,6 @@ public:
 
 private:
     void setPath();
-    void forceTerminal();
     LaunchConfig getConfiguration();
 
 signals:
