@@ -34,9 +34,9 @@ int AppManager::start(int argc, char* argv[])
         QCoreApplication ca(argc, argv);
 
         TerminalCore terminalCore(this);
-        terminalCore.start();
 
-        return 0;
+
+        return terminalCore.start();;
     }
     else
         return 0;
