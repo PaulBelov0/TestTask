@@ -19,9 +19,12 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <thread>
+#include <chrono>
 
 #include <QObject>
 #include <QDebug>
+#include <QDir>
 #include <QProcess>
 #include <QCoreApplication>
 #include <QTextStream>
@@ -40,7 +43,7 @@ private:
     std::string m_path;
 
     QScopedPointer<ArchiveManager> m_archiveManager;
-    QSharedPointer<QProcess> m_terminalProcess;
+    QScopedPointer<QProcess> m_terminalProcess;
 };
 
 #endif // TERMINAL_CORE_H
