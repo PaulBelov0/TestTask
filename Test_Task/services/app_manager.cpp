@@ -31,12 +31,15 @@ int AppManager::start(int argc, char* argv[])
     }
     else if (m_launchConfig == LaunchConfig::Cmd)
     {
-        QCoreApplication ca(argc, argv);
+        QCoreApplication a(argc, argv);
 
-        TerminalCore terminalCore(this);
+        TerminalCore* terminalCore = new TerminalCore(&a);
 
+        connect(terminalCore, &TerminalCore::finished, &a, &QCoreApplication::quit);
 
-        return terminalCore.start();;
+        QTimer::singleShot(0, terminalCore, &TerminalCore::start);
+
+        return a.exec();
     }
     else
         return 0;

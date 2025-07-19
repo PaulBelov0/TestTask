@@ -13,6 +13,7 @@
 #include <QResource>
 #include <QProcess>
 #include <QSharedPointer>
+#include <QTimer>
 
 #include "archive_manager.h"
 #include "ui/main_window.h"

@@ -36,8 +36,11 @@ class TerminalCore : public QObject
     Q_OBJECT
 public:
     explicit TerminalCore(QObject *parent = nullptr);
-    int start();
     void forceTerminal();
+public slots:
+    int start();
+signals:
+    void finished();
 
 private:
     std::string m_path;
