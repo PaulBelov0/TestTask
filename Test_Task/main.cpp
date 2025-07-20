@@ -2,13 +2,15 @@
 
 #ifdef __WIN32__
 #include <windows.h>
+#include <io.h>
+#include <fcntl.h>
 #endif
 
 int main(int argc, char *argv[])
 {
 #if __WIN32__
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
+    _setmode(_fileno(stdout), _O_U16TEXT);
+    _setmode(_fileno(stdin), _O_U16TEXT);
 #endif
 
     AppManager app;

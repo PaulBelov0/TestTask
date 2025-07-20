@@ -10,6 +10,9 @@ int TerminalCore::start()
 {
     forceTerminal();
 
+
+    std::wcout << "привет" << std::endl;
+    qDebug() << "вызов TerminalCore::start()";
     std::cout << "Введите путь к файлу '*.zip':    ";
     std::getline(std::cin, m_path);
     std::cout << "User input:   " << m_path << std::endl;
@@ -26,9 +29,19 @@ void TerminalCore::forceTerminal()
 {
 #ifdef __WIN32__
     AllocConsole();
-    freopen("CONIN$", "r", stdin);   // Перенаправляет stdin
-    freopen("CONOUT$", "w", stdout); // Перенаправляет stdout
-    freopen("CONOUT$", "w", stderr); // Перенаправляет stderr
+
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
+    freopen("CONIN$", "r", stdin);
+    freopen("CONOUT$", "w", stdout);
+    freopen("CONOUT$", "w", stderr);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    qSetMessagePattern("%{file}(%{line}): %{message}");
+#else
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
+#endif
 
 #elif __linux__
     if (!isatty(fileno(stdout)))

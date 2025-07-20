@@ -15,7 +15,7 @@
 #include <shlobj.h>
 #endif
 
-
+#include <io.h>
 #include <iostream>
 #include <string>
 #include <cstdlib>
