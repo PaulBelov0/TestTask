@@ -13,9 +13,9 @@
 #include <windows.h>
 #include <shlwapi.h>
 #include <shlobj.h>
+#include <io.h>
 #endif
 
-#include <io.h>
 #include <iostream>
 #include <string>
 #include <cstdlib>
