@@ -7,10 +7,8 @@
 int main(int argc, char *argv[])
 {
 #if __WIN32__
-    SetConsoleOutputCP(1251);
-    SetConsoleCP(1251);
-
-    setlocale(LC_ALL, "Russian");
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
 #endif
 
     AppManager app;

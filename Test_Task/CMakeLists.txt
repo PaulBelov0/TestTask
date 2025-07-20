@@ -17,6 +17,7 @@ qt_add_executable(Test_Task
     services/archive_manager.h services/archive_manager.cpp
     config.json
     terminal/terminal_core.h terminal/terminal_core.cpp
+    services/archiver_pipeline.h services/archiver_pipeline.cpp
 )
 
 target_include_directories(Test_Task PRIVATE
@@ -44,6 +45,8 @@ install(TARGETS Test_Task
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+add_compile_options("/utf-8")
 
 qt_generate_deploy_app_script(
     TARGET Test_Task

@@ -12,7 +12,7 @@ int TerminalCore::start()
 
     std::cout << "Введите путь к файлу '*.zip':    ";
     std::getline(std::cin, m_path);
-    std::cout << "User input:   " << m_path;
+    std::cout << "User input:   " << m_path << std::endl;
     if (m_path == "")
         return 0;
 
