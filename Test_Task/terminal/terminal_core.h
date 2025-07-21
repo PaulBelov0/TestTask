@@ -29,23 +29,31 @@
 #include <QCoreApplication>
 #include <QTextStream>
 
-#include "services/archive_manager.h"
+#include "services/archiver_pipeline.h"
 
 class TerminalCore : public QObject
 {
     Q_OBJECT
 public:
-    explicit TerminalCore(QObject *parent = nullptr);
+    explicit TerminalCore(ArchiverPipeline* archiverPipeline, QObject *parent = nullptr);
     void forceTerminal();
-public slots:
-    int start();
+
 signals:
     void finished();
+    void onReadPathReady(std::string&);
+    void onSavePathReady(std::string&);
+    void onPathWrong();
+
+public slots:
+    int start();
+
+private slots:
+    void setupPathToSave();
+    void setupPathToRead();
 
 private:
-    std::string m_path;
 
-    QScopedPointer<ArchiveManager> m_archiveManager;
+private:
     QScopedPointer<QProcess> m_terminalProcess;
 };
 

@@ -15,7 +15,7 @@
 #include <QSharedPointer>
 #include <QTimer>
 
-#include "archive_manager.h"
+#include "archiver_pipeline.h"
 #include "ui/main_window.h"
 #include "terminal/terminal_core.h"
 
@@ -40,6 +40,7 @@ private:
     QString m_path;
     LaunchConfig m_launchConfig;
     QSharedPointer<QJsonDocument> m_cfg;
+    QSharedPointer<ArchiverPipeline> m_archiverPipeline;
 };
 
 enum class LaunchConfig

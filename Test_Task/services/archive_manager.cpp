@@ -13,7 +13,7 @@ ArchiveManager::ArchiveManager(QObject* parent)
     m_targetWord = "secret";
 }
 
-void ArchiveManager::setPath(std::string& path)
+void ArchiveManager::setPath(const std::string& path)
 {
     m_path = QString::fromStdString(path);
 }

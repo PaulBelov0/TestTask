@@ -21,7 +21,7 @@ public:
 
     void processZip();
 
-    void setPath(std::string& path);
+    void setPath(const std::string& path);
 
     qint64 findEOCD(QFile &file);
     QList<ZipEntry> readCentralDirectory(QFile &file, qint64 eocdPos);

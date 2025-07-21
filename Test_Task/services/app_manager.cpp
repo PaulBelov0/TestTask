@@ -11,6 +11,8 @@ AppManager::AppManager(QObject* parent)
     m_cfg = QSharedPointer<QJsonDocument>(new QJsonDocument(QJsonDocument::fromJson(file.readAll())));
     m_launchConfig = getConfiguration();
 
+    m_archiverPipeline = QSharedPointer<ArchiverPipeline>::create(this);
+
     connect(this, &AppManager::onUserNullPath, [this]{setPath();});
 }
 
@@ -33,7 +35,7 @@ int AppManager::start(int argc, char* argv[])
     {
         QCoreApplication a(argc, argv);
 
-        TerminalCore* terminalCore = new TerminalCore(&a);
+        TerminalCore* terminalCore = new TerminalCore(m_archiverPipeline.get(), &a);
 
         connect(terminalCore, &TerminalCore::finished, &a, &QCoreApplication::quit);
 
