@@ -9,6 +9,8 @@ TerminalCore::TerminalCore(ArchiverPipeline* archiverPipeline, QObject *parent)
 
     connect(archiverPipeline, &ArchiverPipeline::onFileDirectoryWrong, this, &TerminalCore::setupPathToRead);
     connect(archiverPipeline, &ArchiverPipeline::onSaveDirecroryWrong, this, &TerminalCore::setupPathToSave);
+
+    connect(archiverPipeline, &ArchiverPipeline::onProcessingDone, this, &TerminalCore::setupPathToSave);
 }
 
 int TerminalCore::start()
@@ -17,7 +19,7 @@ int TerminalCore::start()
 
     setupPathToRead();
 
-    setupPathToSave();
+    // setupPathToSave();
 
     emit finished();
     return 0;

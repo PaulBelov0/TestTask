@@ -15,22 +15,41 @@ struct ZipEntry;
 
 class ArchiveManager : public QObject
 {
+    Q_OBJECT
 public:
     explicit ArchiveManager(QString& path, QObject* parent = nullptr);
     explicit ArchiveManager(QObject* parent = nullptr);
 
-    void processZip();
+    bool processZip();
 
     void setPath(const std::string& path);
 
-    qint64 findEOCD(QFile &file);
-    QList<ZipEntry> readCentralDirectory(QFile &file, qint64 eocdPos);
-    QByteArray readUncompressedFile(QFile &zipFile, QList<ZipEntry>::iterator &entry);
+signals:
+    void onFileReaded(QString& filename);
+    void onProcessingFinished();
 
 private:
     QString m_targetWord;
     QString m_path;
 };
+
+
+
+#pragma pack(push, 1)  // Выравнивание 1 байт
+struct ZipLocalFileHeader {
+    uint32_t signature;       // 0x04034B50
+    uint16_t version;
+    uint16_t flags;
+    uint16_t compression;
+    uint16_t modTime;
+    uint16_t modDate;
+    uint32_t crc32;
+    uint32_t compressedSize;
+    uint32_t uncompressedSize;
+    uint16_t fileNameLength;
+    uint16_t extraFieldLength;
+};
+#pragma pack(pop)
 
 struct ZipEntry
 {

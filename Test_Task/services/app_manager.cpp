@@ -26,7 +26,7 @@ int AppManager::start(int argc, char* argv[])
         QApplication a(argc, argv);
         setPath();
 
-        MainWindow w(m_path);
+        MainWindow w(m_archiverPipeline.get(), m_path);
         w.show();
 
         return a.exec();

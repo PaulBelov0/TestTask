@@ -52,8 +52,6 @@ private slots:
     void setupPathToRead();
 
 private:
-
-private:
     QScopedPointer<QProcess> m_terminalProcess;
 };
 

@@ -18,121 +18,72 @@ void ArchiveManager::setPath(const std::string& path)
     m_path = QString::fromStdString(path);
 }
 
-void ArchiveManager::processZip()
+bool ArchiveManager::processZip()
 {
+    // Constants from official ZIP specifications
+    const int SIGNATURE_SIZE = 4;
+    const int VERSION_NEEDED_OFFSET = 4;
+    const int COMPRESSION_METHOD_OFFSET = 8;
+    const int FILENAME_LENGTH_OFFSET = 26;
+    const int EXTRA_FIELD_LENGTH_OFFSET = 28;
+    const int FILENAME_OFFSET = 30;
+
     QFile file(m_path);
     if (!file.open(QIODevice::ReadOnly))
     {
-        qWarning() << "File open Error!";
-        return;
+        qWarning() << "Cannot open file:" << m_path;
+        return false;
     }
 
-    qint64 eocdPos = findEOCD(file);
-    if (eocdPos == -1)
+    const QByteArray zipSignature = "PK\x03\x04";
+    QByteArray data = file.readAll();
+    file.close();
+
+    int pos = 0;
+    bool found = false;
+
+    while ((pos = data.indexOf(zipSignature, pos)) != -1)
     {
-        qDebug() << "It's not ZIP";
-        return;
-    }
+        int start = pos + zipSignature.size();
+        int nextHeaderPos = data.indexOf(zipSignature, start);
 
-    QList<ZipEntry> entries = readCentralDirectory(file, eocdPos);
-    for (QList<ZipEntry>::iterator it = entries.begin(); it != entries.end(); ++it)
-    {
-        if (!it->filename.endsWith(".txt")) continue;
-
-        QByteArray data = readUncompressedFile(file, it);
-
-        if (data.contains(m_targetWord.toUtf8()))
+        if (nextHeaderPos == -1)
         {
-            qDebug() << "File:" << it->filename;
-            // Написать сохранение в нужную папку           //todo
+            nextHeaderPos = data.size();
         }
-    }
-}
 
-qint64 ArchiveManager::findEOCD(QFile &file)
-{
-    const quint32 EOCD_SIGNATURE = 0x06054b50;
-    const qint64 maxSearchSize = 1024 * 1024; // Searchging in last 1 МБ of file
-
-    file.seek(qMax(file.size() - maxSearchSize, 0LL));
-
-    QDataStream stream(&file);
-    stream.setByteOrder(QDataStream::LittleEndian);
-
-    while (!stream.atEnd())
-    {
-        quint32 signature;
-        stream >> signature;
-        if (signature == EOCD_SIGNATURE)
+        QString filename = "unknown";
+        if (pos + FILENAME_OFFSET < data.size())
         {
-            return file.pos() - 4; // Return EOCD position
+            quint16 fileNameLength = *reinterpret_cast<const quint16*>(
+                data.constData() + pos + FILENAME_LENGTH_OFFSET);
+
+            if (pos + FILENAME_OFFSET + fileNameLength <= data.size())
+            {
+                filename = QString::fromLatin1(
+                    data.constData() + pos + FILENAME_OFFSET,
+                    fileNameLength);
+            }
         }
+
+        QByteArray chunk = data.mid(start, nextHeaderPos - start);
+
+        if (chunk.contains(m_targetWord.toUtf8()))
+        {
+            qDebug() << "✅ File" << filename << "contains" << m_targetWord;
+            found = true;
+        }
+        else
+        {
+            qDebug() << "❌ File" << filename << "doesn't contain" << m_targetWord;
+        }
+
+        pos = nextHeaderPos;
     }
-    return -1;
-}
 
-QList<ZipEntry> ArchiveManager::readCentralDirectory(QFile &file, qint64 eocdPos)
-{
-    QList<ZipEntry> entries;
-    QDataStream stream(&file);
-    stream.setByteOrder(QDataStream::LittleEndian);
-
-    file.seek(eocdPos + 10);
-    quint16 numEntries;
-    stream >> numEntries;
-
-    file.seek(eocdPos + 16);
-    quint32 cdOffset;
-    stream >> cdOffset;
-    file.seek(cdOffset);
-
-    for (int i = 0; i < numEntries; ++i)
+    if (!found)
     {
-        quint32 signature;
-        stream >> signature;
-        if (signature != 0x02014b50) break; // Central Title
-
-        file.seek(file.pos() + 4); //Skip version
-        quint16 flags, compressionMethod;
-        stream >> flags >> compressionMethod;
-
-        file.seek(file.pos() + 10); //Skip date/time and crc
-
-        quint32 compressedSize, uncompressedSize;
-        stream >> compressedSize >> uncompressedSize;
-
-        quint16 filenameLen, extraLen, commentLen;
-        stream >> filenameLen >> extraLen >> commentLen;
-
-        file.seek(file.pos() + 8); //skip disk and attributes
-
-        quint32 localHeaderOffset;
-        stream >> localHeaderOffset;
-
-        QByteArray filename(filenameLen, '\0');
-        stream.readRawData(filename.data(), filenameLen);
-
-        file.seek(file.pos() + extraLen + commentLen);
-
-        entries.append({
-            QString::fromLatin1(filename),
-            compressionMethod != 0,
-            compressedSize,
-            uncompressedSize,
-            localHeaderOffset
-        });
+        qDebug() << "Target word not found in any file of archive:" << m_path;
     }
-
-    return entries;
-}
-
-QByteArray ArchiveManager::readUncompressedFile(QFile &zipFile, QList<ZipEntry>::iterator &entry)
-{
-    zipFile.seek(entry->localHeaderOffset + 26); // Go to file data
-
-    quint16 filenameLen, extraLen;
-    QDataStream(&zipFile) >> filenameLen >> extraLen;
-
-    zipFile.seek(zipFile.pos() + filenameLen + extraLen); // Skip title
-    return zipFile.read(entry->compressedSize);
+    return found;
 }

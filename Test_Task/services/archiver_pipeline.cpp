@@ -3,13 +3,25 @@
 ArchiverPipeline::ArchiverPipeline(QObject *parent)
     : QObject{parent}
     , m_archive(new ArchiveManager(this))
-{}
+{
+    connect(this, &ArchiverPipeline::onFileDetectedSuccessful, this, &ArchiverPipeline::startProcessing);
+    connect(m_archive.get(), &ArchiveManager::onProcessingFinished, this, &ArchiverPipeline::onProcessingDone);
+}
+
+void ArchiverPipeline::startProcessing()
+{
+    m_archive->processZip();
+}
 
 void ArchiverPipeline::setPathToRead(const std::string& path)
 {
-    checkPathToRead(path);
+    bool isDone = checkPathToRead(path);
 
-    m_archive->setPath(path);
+    if (isDone)
+    {
+        m_archive->setPath(path);
+        emit onFileDetectedSuccessful();
+    }
 }
 
 void ArchiverPipeline::setPathToSave(const std::string& path)

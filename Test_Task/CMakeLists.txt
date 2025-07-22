@@ -21,6 +21,8 @@ qt_add_executable(Test_Task
     services/archiver_pipeline.h services/archiver_pipeline.cpp
 )
 
+find_package(ZLIB REQUIRED)
+
 target_include_directories(Test_Task PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/ui/widgets

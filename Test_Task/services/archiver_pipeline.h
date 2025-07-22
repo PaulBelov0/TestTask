@@ -17,11 +17,15 @@ class ArchiverPipeline : public QObject
 public:
     explicit ArchiverPipeline(QObject *parent = nullptr);
 
+    void startProcessing();
+
 signals:
     void onFileDirectoryWrong();
     void onSaveDirecroryWrong();
     void onFileReaded();
     void onFileSaved();
+    void onFileDetectedSuccessful();
+    void onProcessingDone();
 
 public slots:
     void setPathToRead(const std::string& path);
