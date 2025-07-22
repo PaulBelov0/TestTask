@@ -21,11 +21,7 @@ void ArchiveManager::setPath(const std::string& path)
 bool ArchiveManager::processZip()
 {
     // Constants from official ZIP specifications
-    const int SIGNATURE_SIZE = 4;
-    const int VERSION_NEEDED_OFFSET = 4;
-    const int COMPRESSION_METHOD_OFFSET = 8;
     const int FILENAME_LENGTH_OFFSET = 26;
-    const int EXTRA_FIELD_LENGTH_OFFSET = 28;
     const int FILENAME_OFFSET = 30;
 
     QFile file(m_path);
