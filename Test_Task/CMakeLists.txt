@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.19)
 project(Test_Task LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 17)
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 
 qt_standard_project_setup()
@@ -16,7 +17,11 @@ qt_add_executable(Test_Task
     services/app_manager.h services/app_manager.cpp
     services/archive_manager.h services/archive_manager.cpp
     config.json
+    terminal/terminal_core.h terminal/terminal_core.cpp
+    services/archiver_pipeline.h services/archiver_pipeline.cpp
 )
+
+find_package(ZLIB REQUIRED)
 
 target_include_directories(Test_Task PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -43,6 +48,8 @@ install(TARGETS Test_Task
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+add_compile_options("/utf-8")
 
 qt_generate_deploy_app_script(
     TARGET Test_Task

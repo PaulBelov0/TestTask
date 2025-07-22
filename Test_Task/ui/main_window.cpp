@@ -1,6 +1,6 @@
 #include "main_window.h"
 
-MainWindow::MainWindow(QString& path, QWidget *parent)
+MainWindow::MainWindow(ArchiverPipeline* archiverPipeline, QString& path, QWidget *parent)
     : QMainWindow(parent)
 {
     setMinimumSize(800, 600);
