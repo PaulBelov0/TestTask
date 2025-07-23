@@ -4,7 +4,7 @@ ArchiverPipeline::ArchiverPipeline(QObject *parent)
     : QObject{parent}
     , m_archive(new ArchiveManager(this))
 {
-    connect(this, &ArchiverPipeline::onFileDetectedSuccessful, this, &ArchiverPipeline::startProcessing);
+    connect(this, &ArchiverPipeline::onSaveDirSet, this, &ArchiverPipeline::startProcessing);
     connect(m_archive.get(), &ArchiveManager::onProcessingFinished, this, &ArchiverPipeline::onProcessingDone);
 }
 
@@ -29,7 +29,8 @@ void ArchiverPipeline::setPathToSave(const std::string& path)
     if (!checkPathToSave(path))
         return;
 
-    m_pathToSave = QString::fromStdString(path);
+    m_archive->setSaveDir(path);
+    emit onSaveDirSet();
 }
 
 bool ArchiverPipeline::checkPathToSave(const std::string& path)

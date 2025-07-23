@@ -19,7 +19,7 @@ int TerminalCore::start()
 
     setupPathToRead();
 
-    // setupPathToSave();
+    setupPathToSave();
 
     emit finished();
     return 0;
