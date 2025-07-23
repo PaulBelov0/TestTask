@@ -26,6 +26,7 @@ signals:
     void onFileSaved();
     void onFileDetectedSuccessful();
     void onProcessingDone();
+    void onSaveDirSet();
 
 public slots:
     void setPathToRead(const std::string& path);

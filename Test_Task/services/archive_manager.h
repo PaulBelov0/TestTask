@@ -10,6 +10,8 @@
 #include <QList>
 #include <QByteArray>
 #include <QDebug>
+#include <QDir>
+#include <QRegularExpression>
 
 struct ZipEntry;
 
@@ -19,18 +21,25 @@ class ArchiveManager : public QObject
 public:
     explicit ArchiveManager(QString& path, QObject* parent = nullptr);
     explicit ArchiveManager(QObject* parent = nullptr);
+    ArchiveManager(QString& filePath, QString& saveDir, QObject *parent);
 
     bool processZip();
 
     void setPath(const std::string& path);
+    bool saveFile(const QString& filename, const QByteArray& content);
+
+public slots:
+    void setSaveDir(const std::string& dir);
 
 signals:
     void onFileReaded(QString& filename);
+    void onSaveDirectorySet();
     void onProcessingFinished();
 
 private:
     QString m_targetWord;
     QString m_path;
+    QString m_saveDir;
 };
 
 
