@@ -33,6 +33,7 @@ void ArchiveManager::setSaveDir(const std::string& dir)
 
 bool ArchiveManager::processZip()
 {
+    //for init commit
     const int FILENAME_LENGTH_OFFSET = 26;
     const int FILENAME_OFFSET = 30;
 
