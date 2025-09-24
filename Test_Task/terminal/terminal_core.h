@@ -9,6 +9,14 @@
 #include <fcntl.h>
 #endif
 
+#ifdef TARGET_OS_X
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#endif
+
 #ifdef __WIN32
 #include <windows.h>
 #include <shlwapi.h>

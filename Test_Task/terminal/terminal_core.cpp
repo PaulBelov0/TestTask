@@ -72,5 +72,15 @@ void TerminalCore::forceTerminal()
 
         m_terminalProcess->startDetached(terminal, {"-e", "bash", "-c", command});
     }
+
+#elif TARGET_OS_X
+    if (!isatty(fileno(stdout)))
+    {
+        QString terminal = "x-terminal-emulator";
+
+        QString command = QString("\"%1\"; bash -i").arg(QCoreApplication::applicationFilePath());
+
+        m_terminalProcess->startDetached(terminal, {"-e", "bash", "-c", command});
+    }
 #endif
 }
