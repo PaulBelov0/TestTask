@@ -84,7 +84,7 @@ void AppManager::setPath()
     QMessageBox msg;
     msg.setText("Error! Unsupported System");
     msg.exec();
-    return 0;
+    return;
 
 #endif
 

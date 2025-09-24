@@ -13,6 +13,7 @@
 #include <QResource>
 #include <QProcess>
 #include <QSharedPointer>
+#include <QMessageBox>
 #include <QTimer>
 
 #include "archiver_pipeline.h"
